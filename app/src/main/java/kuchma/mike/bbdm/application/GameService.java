@@ -3,7 +3,6 @@ package kuchma.mike.bbdm.application;
 import kuchma.mike.bbdm.domain.model.GameId;
 import kuchma.mike.bbdm.domain.model.ItemPurchaseResult;
 import kuchma.mike.bbdm.domain.model.MessageBoard;
-import kuchma.mike.bbdm.domain.model.MessageDecision;
 import kuchma.mike.bbdm.domain.model.MessageId;
 import kuchma.mike.bbdm.domain.model.MessageResolution;
 import kuchma.mike.bbdm.domain.model.ShopInventory;
@@ -26,9 +25,8 @@ public class GameService {
         return gameGateway.getMessages(new GameId(gameId));
     }
 
-    public MessageResolution dealWithMessage(String gameId, String messageId, DealMessageCommand command) {
-        MessageDecision decision = MessageDecision.fromAction(command.action());
-        return gameGateway.dealWithMessage(new GameId(gameId), new MessageId(messageId), decision);
+    public MessageResolution dealWithMessage(String gameId, String messageId) {
+        return gameGateway.dealWithMessage(new GameId(gameId), new MessageId(messageId));
     }
 
     public ShopInventory getShop(String gameId) {

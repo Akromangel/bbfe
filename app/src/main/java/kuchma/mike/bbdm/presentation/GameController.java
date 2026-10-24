@@ -1,12 +1,10 @@
 package kuchma.mike.bbdm.presentation;
 
-import kuchma.mike.bbdm.application.DealMessageCommand;
 import kuchma.mike.bbdm.application.GameService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,10 +38,9 @@ public class GameController {
     @PostMapping("/{" + GAME_ID_PATH_VARIABLE + "}/messages/{" + MESSAGE_ID_PATH_VARIABLE + "}")
     public Object dealWithMessage(
         @PathVariable(GAME_ID_PATH_VARIABLE) String gameId,
-        @PathVariable(MESSAGE_ID_PATH_VARIABLE) String messageId,
-        @RequestBody DealMessageCommand command
+        @PathVariable(MESSAGE_ID_PATH_VARIABLE) String messageId
     ) {
-        return gameService.dealWithMessage(gameId, messageId, command);
+        return gameService.dealWithMessage(gameId, messageId);
     }
 
     @GetMapping("/{" + GAME_ID_PATH_VARIABLE + "}/shop")
