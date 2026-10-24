@@ -1,7 +1,13 @@
 package kuchma.mike.bbdm.presentation;
 
 import kuchma.mike.bbdm.application.GameService;
+import kuchma.mike.bbdm.application.MessageResolutionRejectedException;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +47,21 @@ public class GameController {
         @PathVariable(MESSAGE_ID_PATH_VARIABLE) String messageId
     ) {
         return gameService.dealWithMessage(gameId, messageId);
+    }
+
+    @ExceptionHandler(MessageResolutionRejectedException.class)
+    public ResponseEntity<ProblemDetail> handleRejectedMessage(
+        final MessageResolutionRejectedException exception
+    ) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            exception.getMessage()
+        );
+        problem.setTitle("Message could not be resolved");
+        problem.setProperty("messageId", exception.messageId());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .body(problem);
     }
 
     @GetMapping("/{" + GAME_ID_PATH_VARIABLE + "}/shop")
